@@ -11,6 +11,6 @@ These packages help me (1) collect the data, and (2) analyze it (respectively). 
 2. Scrape all the data from the `petango` link
 3. Read the old data file (if there is one)
 4. Compare the new data to the old data
-5. Report if there are any new dogs listed, via email (working on this)
+5. Report if there are any new dogs listed, via email
 6. Save the new data to a file
 7. Profit (not really)
