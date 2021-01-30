@@ -6,7 +6,7 @@ I use a couple libraries here to help me scrape and analyze the data:
 1. Requests-HTML
 2. CSV and Pandas
 
-These two packages help me (1) collect the data, and (2) analyze it (respectively). The process, generally, is as follows:
+These packages help me (1) collect the data, and (2) analyze it (respectively). The process, generally, is as follows:
 1. Use the link passed to the script to find the `petango` link (this brings us to a page with HTML that is easily readable, compared to the shelter pages)
 2. Scrape all the data from the `petango` link
 3. Read the old data file (if there is one)
