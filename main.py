@@ -1,13 +1,11 @@
 import sys
 import csv
-import pandas
+import pandas as pd
 from requests_html import HTMLSession
-from os import path
-import smtplib
-import ssl
+import os
+from twilio.rest import Client
 
 session = HTMLSession()
-#print("Successfully set up HTML session!")
 
 # pass the shelter's dog listing URL as a script arg
 r = session.get(sys.argv[1])
@@ -24,8 +22,8 @@ dogs = [a.text.splitlines() for a in animal_info_block_list_raw]
 # read the old dog data to compare
 shelter_name = sys.argv[1].split("//")[1].split("/")[0].split(".")[-2]
 filename = f'{shelter_name}_data.csv'
-if path.exists(filename):
-    old_data = pandas.read_csv(filename)
+if os.path.exists(filename):
+    old_data = pd.read_csv(filename)
 
     # compare the old data to the new data
     old_dog_names = [d[0] for d in old_data.values]
@@ -36,19 +34,20 @@ if path.exists(filename):
         if name not in old_dog_names:
             added_dogs.append(name)
 
+    account_sid = ''
+    auth_token = ''
+    client = Client(account_sid, auth_token)
     if len(added_dogs) > 0:
         print("Found new dogs: ", added_dogs)
-        port = 465 # For SSL
-        email = "thomas.e.mccall@gmail.com"
-        password = input("Password: ")
-        msg_content = f'Subject: New dogs found at {shelter_name}\n\n{added_dogs}'
 
-        # Create a secure SSL context
-        context = ssl.create_default_context()
+        message = client.messages \
+            .create(
+                body=f'New dogs: {added_dogs}',
+                from_='',
+                to=''
+            )
 
-        with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
-            server.login(email, password)
-            server.sendmail(email, email, msg_content)
+        print(message.sid)
     else:
         print("No new dogs found at", shelter_name)
 else:
